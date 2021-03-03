@@ -1,15 +1,17 @@
 const express = require('express');
 const morgan = require("morgan");
+const cors = require("cors");
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 // Create Express Server
 const app = express();
 
 // Configuration
-const PORT = 3000;
-const HOST = "localhost";
-const API_SERVICE_URL = "https://jsonplaceholder.typicode.com";
+const PORT = 3004;
+const HOST = '10.1.16.74';
+const API_SERVICE_URL = "http://ngsst-loadb-16mh0sxownmqp-1251916990.ap-northeast-1.elb.amazonaws.com/";
 
+app.use(cors())
 // Logging
 app.use(morgan('dev'));
 
@@ -28,12 +30,12 @@ app.use('', (req, res, next) => {
 });
 
 // Proxy endpoints
-app.use('/json_placeholder', createProxyMiddleware({
+app.use('/test', createProxyMiddleware({
     target: API_SERVICE_URL,
     changeOrigin: true,
     pathRewrite: {
-        [`^/json_placeholder`]: '',
-    },
+        [`^/test`]: '',
+    }
 }));
 
 // Start Proxy
